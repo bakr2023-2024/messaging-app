@@ -17,7 +17,7 @@ const cors = require("cors");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const URI = process.env.MONGO_URI;
-const store = new MongoStore({ url: URI });
+const store = new MongoStore({ mongooseConnection: mongoose.connection });
 const cookieParser = require("cookie-parser");
 const passportSocketIo = require("passport.socketio");
 app.use(cors());
@@ -81,7 +81,7 @@ io.on("connection", (socket) => {
       id: socket.request.user.id,
       username: socket.request.user.username,
       message,
-      color:socket.request.user.color
+      color: socket.request.user.color,
     });
   });
 });
