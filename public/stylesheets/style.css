@@ -1,0 +1,29 @@
+body {
+  padding: 50px;
+  font:
+    14px "Lucida Grande",
+    Helvetica,
+    Arial,
+    sans-serif;
+  background-color: black;
+  color: white;
+}
+#msgContainer {
+  height: 50vh;
+  overflow: auto;
+}
+a {
+  color: #00b7ff;
+}
+p[data-id="system"] {
+  color: yellow;
+}
+.userDiv {
+  display: flex;
+}
+.userOptions button {
+  font-size: 0.5rem;
+}
+.username {
+  font-weight: bold;
+}

@@ -1,0 +1,11 @@
+head 
+
+body
+  if (messages.error)
+    p= messages.error
+  h1 Login Form
+  form(method="post", action="/login")
+    input(type="text", name="username", required, placeholder="username")
+    input(type="password", name="password", required, placeholder="password")
+    input(type="submit")
+  a(href="/register") Register

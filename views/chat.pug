@@ -1,0 +1,59 @@
+head 
+    link(rel='stylesheet' href='./stylesheets/style.css')
+body
+  h1 welcome back #{ username }
+  p Number of clients:
+    span#clientNum 0
+  select(name='color')
+    option(value='' disabled selected) select a color
+    option(value='red') red 
+    option(value='green') green 
+    option(value='blue') blue
+  button#changeColor change color
+  #msgContainer 
+  form#inputForm
+    input#msgInput(type="text", required, placeholder="Enter message...")
+    input(type="submit", value="Send")
+  button#toggleConnectBtn Disconnect
+  button#logoutBtn Logout
+  script(src="/socket.io/socket.io.js")
+  script(src='https://code.jquery.com/jquery-3.6.4.min.js')
+  script.
+      $(() => {
+      const socket = io();
+      const msgContainer = $("#msgContainer");
+      const toggleButton = $('#toggleConnectBtn')
+      const clientNum = $("#clientNum");
+      socket.on("chat msg", (data) => {
+          msgContainer.append(`
+              <p class='text' data-id=${data.id} data-username=${data.username}><span'>${data.username}:</span> ${data.message}</p>
+          `);
+          msgContainer.scrollTop(msgContainer.prop("scrollHeight"));
+      });
+      socket.on("user", (data) => {
+        clientNum.text(data.clientNum);
+        msgContainer.append(`<p data-id='system'>${data.username} has ${data.connected ? "connected" : "disconnected"}</p>`);
+      });
+      $('select').change(function(e){
+        $('.text').css('color',e.target.value)
+      })
+      $("#inputForm").submit(() => {
+        const msg = $("#msgInput").val();
+        socket.emit("msg",msg);
+        $("#msgInput").val("");
+        return false;
+      });
+      $("#logoutBtn").click( () => {
+          $.ajax({
+            url: "/logout",
+            type: "delete",
+            success:(res)=>{
+            window.location.href = "/login";
+            },
+            error:(err)=>{
+            location.reload();
+            }
+          });
+      });
+    });
+  
